@@ -1,0 +1,65 @@
+{
+    "identificador": "11086",
+    "viajes": [
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "20503",
+            "kilometros": "4.8",
+            "precio_kilometro": "450"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "20503",
+            "kilometros": "5.7",
+            "precio_kilometro": "200"
+        },
+        {
+            "codigo_postal_origen": "10802",
+            "codigo_postal_destino": "20301",
+            "kilometros": "4.3",
+            "precio_kilometro": "855"
+        },
+        {
+            "codigo_postal_origen": "20301",
+            "codigo_postal_destino": "30304",
+            "kilometros": "5.3",
+            "precio_kilometro": "520"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "20305",
+            "kilometros": "6.3",
+            "precio_kilometro": "850"
+        },
+        {
+            "codigo_postal_origen": "20305",
+            "codigo_postal_destino": "30304",
+            "kilometros": "3.1",
+            "precio_kilometro": "250"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "10802",
+            "kilometros": "5.3",
+            "precio_kilometro": "520"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "10802",
+            "kilometros": "4.8",
+            "precio_kilometro": "320"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "10802",
+            "kilometros": "6.7",
+            "precio_kilometro": "780"
+        },
+        {
+            "codigo_postal_origen": "30304",
+            "codigo_postal_destino": "10802",
+            "kilometros": "6.6",
+            "precio_kilometro": "760"
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "identificador": "78625",
+    "viajes": [
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "11501",
+            "kilometros": "2.8",
+            "precio_kilometro": "550"
+        },
+        {
+            "codigo_postal_origen": "11501",
+            "codigo_postal_destino": "11504",
+            "kilometros": "3.1",
+            "precio_kilometro": "550"
+        },
+        {
+            "codigo_postal_origen": "20101",
+            "codigo_postal_destino": "10301",
+            "kilometros": "26.3",
+            "precio_kilometro": "175"
+        },
+        {
+            "codigo_postal_origen": "10301",
+            "codigo_postal_destino": "11504",
+            "kilometros": "18.3",
+            "precio_kilometro": "520"
+        },
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "10305",
+            "kilometros": "6.3",
+            "precio_kilometro": "300"
+        },
+        {
+            "codigo_postal_origen": "10305",
+            "codigo_postal_destino": "11504",
+            "kilometros": "6.1",
+            "precio_kilometro": "250"
+        },
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "10101",
+            "kilometros": "5.3",
+            "precio_kilometro": "520"
+        },
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "10101",
+            "kilometros": "4.8",
+            "precio_kilometro": "520"
+        },
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "20101",
+            "kilometros": "16.7",
+            "precio_kilometro": "400"
+        },
+        {
+            "codigo_postal_origen": "11504",
+            "codigo_postal_destino": "20101",
+            "kilometros": "16.6",
+            "precio_kilometro": "420"
+        }
+    ]
+}
