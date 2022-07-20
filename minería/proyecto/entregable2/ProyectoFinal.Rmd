@@ -232,10 +232,48 @@ Con respecto al nombre de los países, sí se requiere manipulación de los dato
 
 
 # Fase de Preparación de los datos
+Dado que los arhivos de datos provienen de fuentes diferentes, se hizo necesario aplicar un proceso de limpieza para poder cruzar la información. Para ello, se necesitó una tercera fuente de datos -países- y cambiar valores.
 
 ## Selección de los datos
 
+```{r}
+dfFao <- read.csv('./../entregable1/FAOSTAT.csv', header = TRUE, sep=",", stringsAsFactors = FALSE)
+
+dfCountries <- read.csv('./../entregable1/iso-country-codes.csv', header = TRUE, sep=",", stringsAsFactors = FALSE)
+
+dfConsumption <- read.csv('./../entregable1/oecd_meat_consumption.csv', header = TRUE, sep=",", stringsAsFactors = FALSE)
+head(dfFao, 2)
+```
+
+```{r}
+head(dfCountries, 2)
+```
+
+```{r}
+head(dfConsumption, 2)
+```
+
+
 ## Limpieza de los datos
+
+###Pasos para limpiar dfCountries
+
+1. Seleccionar solo aquellas columnas necesarias.
+1. Renombrar las columnas al igual que las columnas en los otros dataset para luego hacer los joins.
+1. Revisar qué valores de dfCountries no hacen correspondencia con los códigos o nombres usados en los otros datasets.
+
+**Paso 1 y 2**
+```{r}
+dfCountries = dfCountries[, c('Alpha.3.code', 'English.short.name.lower.case')]
+colnames(dfCountries) <- c('LOCATION', 'Area')
+head(dfCountries, 2)
+```
+
+```{r}
+# por aquí voy
+```
+
+
 
 ## Construcción de nuevos datos (atributos)
 
