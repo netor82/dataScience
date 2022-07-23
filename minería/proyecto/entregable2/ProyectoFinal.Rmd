@@ -172,7 +172,7 @@ Como éxito se espera que la predicción antes mencionada tenga un nivel de conf
     d.  Años: "todos".
 
 ### Descripción de los datos
-
+<a href="#" id="descripcion.datos"></a>
 Las variables a utilizar:
 
 1.  Año: en el dataset de la FAO se llama "Year", en el de la OECD se llama "Time".
@@ -238,12 +238,12 @@ Matriz de correlación para valores numéricos:
 
 ### Calidad de datos
 
-Ninguno de los datasets tienen faltantes, string vacíos o valores nulos.
+El dataset de FAO tiene 68 valores nulos que serán omitidos (evidencia en la siguiente sección).  Dichos datos faltantes serán omitidos.
 
 El dataset OECD sobre consumo, trae información sobre el consumo de carnes de 35 países, para un total de 12160 registros.
 De los cuales, 247 valores son iguales a 0, pero no los descartamos pues puede ser que un país no haya tenido producción de ese tipo de carne en un año en particular, o dada su ubicación geográfica o su tipo de actividad económica.
 
-Por otra parte, se removerán los valores para Turquía pues no existen datos que correspondan a ese país en el dataset de la FAO.
+Es este mismo dataset de OECD sobre consumo, una columna viene con todos sus valores en nulo (evidencia también en la sección siguiente), dicha columna se descartarà al limpiar los datos.
 
 Con respecto a los códigos de país, no requiere trabajo adicional pues todos los códigos corresponden a países según los códigos ISO.
 
@@ -277,9 +277,31 @@ dfFao <- read.csv('./../entregable1/FAOSTAT.csv', header = TRUE, sep=",", string
 head2(dfFao, 2)
 ```
 
+Cantidad de elementos en dfFao
+```{r}
+nrow(dfFao)
+```
+
+Cantidad de elementos con NA en el dataset
+```{r}
+colSums(is.na(dfFao))
+```
+
+
+Cantidad de países en el Dataset de dfFao
+```{r}
+length(unique(dfFao$Area))
+```
+
+
 ```{r}
 dfCountries <- read.csv('./../entregable1/iso-country-codes.csv', header = TRUE, sep=",", stringsAsFactors = FALSE)
 head2(dfCountries, 2)
+```
+
+Cantidad de elementos con NA en el dataset
+```{r}
+colSums(is.na(dfCountries))
 ```
 
 ```{r}
@@ -287,9 +309,25 @@ dfConsumption <- read.csv('./../entregable1/oecd_meat_consumption.csv', header =
 head2(dfConsumption, 2)
 ```
 
+```{r}
+nrow(dfConsumption)
+```
+Cantidad de países en el Dataset de dfFao es 38 = 35 países + 3 valores especiales de valores calculados en el dataset, a saber "BRICS", "WLD" y "OECD".
+```{r}
+length(unique(dfConsumption$LOCATION))
+unique(dfConsumption$LOCATION)
+```
+
+
+Cantidad de elementos con NA en el dataset
+```{r}
+colSums(is.na(dfConsumption))
+```
+
+
 ## Limpieza de los datos
 
-###Pasos para limpiar dfCountries
+### Pasos para limpiar dfCountries
 
 1.  Seleccionar solo aquellas columnas necesarias.
 2.  Renombrar las columnas con el mismo nombres de las columnas en los otros dataset para luego hacer los joins.
@@ -350,7 +388,6 @@ corroborarValoresEnFAO <- function(df){
 corroborarValoresEnFAO(dfConsumptionCountries)
 ```
 
-De los 7 valores anteriores, vale acotar que FAO no tiene datos para Turquía.
 
 Se hace correción a esos 7 valores para poder unir ambos datasets.
 
@@ -366,7 +403,7 @@ corregirValorEnFao('Iran (Islamic Republic of)', 'Iran')
 corregirValorEnFao('Russian Federation', 'Russia')
 corregirValorEnFao('Viet Nam', 'Vietnam')
 corregirValorEnFao('United Kingdom of Great Britain and Northern Ireland', 'United Kingdom')
-#Turquía se deja por fuera
+corregirValorEnFao('Türkiye', 'Turkey')
 
 corroborarValoresEnFAO(dfConsumptionCountries)
 
@@ -378,16 +415,11 @@ head2(dfCountries, 5)
 
 ### Pasos para limpiar dfConsumption
 
-Pasos: 1.
-Unir los datos de Consumo con los países.
-2.
-Quitar los códigos de 'Location' propios del análisis de la OECD.
-3.
-Remover entradas para Turquía.
-4.
-Quitar columnas innecesarias.
+1. Unir los datos de Consumo con los países.
+2. Quitar los códigos de 'Location' propios del análisis de la OECD.
+3. Quitar columnas innecesarias.
 
-**1. Unir datos con dataframe de países**
+**Paso 1. Unir datos con dataframe de países**
 
 ```{r}
 dfConsumption = merge(dfConsumption, dfCountries, by='LOCATION', all.x=TRUE) # left join
@@ -398,7 +430,7 @@ head2(dfConsumption, 5)
 unique(dfConsumption[ is.na(dfConsumption$Area), 'LOCATION'])
 ```
 
-***2. Remover Location extras***
+**Paso 2. Remover Location extras**
 
 Remover filas cuando el 'Location' es 'WLD', 'OECD' o 'BRICS'.
 
@@ -417,28 +449,12 @@ Valores de *Area* que no podrían cruzarse:
 unique(dfConsumption[ is.na(dfConsumption$Area), 'LOCATION'])
 ```
 
-**3. Remover Turquía**
-
-Antes:
-
-```{r}
-head2(dfConsumption[dfConsumption$Area == 'Turkey', ], 5)
-```
-
-Después:
-
-```{r}
-
-dfConsumption = dfConsumption[dfConsumption$Area != 'Turkey', ]
-head2(dfConsumption[dfConsumption$Area == 'Turkey', ], 5)
-```
-
-**4. Columnas innecesarias**
+**Paso 3. Remover columnas innecesarias**
 
 Descubriendo cuáles columnas son innecesarias:
 
 -   Location (se sustituye por Area).
--   Flag Codes que son solo nulos.
+-   Flag Codes que son todos valores nulos.
 -   Frecuencia: que siempre es A de Anual.
 -   Indicador: que siempre es MEATCONSUMP.
 -   Columnas de códigos redundantes como Year Code, Item Code, Element Code, Area Code
@@ -470,12 +486,11 @@ head2(dfConsumption, 5)
 
 Este dataset contiene datos de la producción total en toneladas.
 
-Pasos: 1.
-Para nuestro análisis solo nos interesa la producción, para poder compararla con el consumo *dfConsumption*.
-2.
-Cambia los valores de los tipos de carnes para coincidir con los valores en *dfConsumption*.
+1. Para nuestro análisis solo nos interesa la producción, para poder compararla con el consumo *dfConsumption*.
+2. Cambia los valores de los tipos de carnes para coincidir con los valores en *dfConsumption*.
+3. Remover columnas valores faltantes.
 
-**1. Seleccionar columnas**
+**Paso 1. Seleccionar columnas a usar**
 
 Antes:
 
@@ -490,7 +505,7 @@ dfFao = dfFao[c('Area', 'Item', 'Year', 'Value')]
 head2(dfFao, 3)
 ```
 
-**2. Cambiar valores de tipos de carnes**
+**Paso 2. Cambiar valores de tipos de carnes**
 
 Antes:
 
@@ -509,9 +524,38 @@ corregirValorEnFao('Meat, pig', 'PIG', 'Item')
 unique(dfFao['Item'])
 ```
 
+**Paso 3. Remover columnas valores faltantes**
+
+Valores faltantes por columna de los `r nrow(dfFao)` registros:
+
+```{r}
+colSums(is.na(dfFao))
+```
+
+
+```{r}
+dfFao = dfFao[ - which(is.na(dfFao$Value)), ]
+head2(dfFao, 5)
+```
+
+
+Cantidad final de registros en dfFao es `r nrow(dfFao)`.
+```{r, echo=FALSE}
+nrow(dfFao)
+```
+Valores faltantes:
+```{r}
+colSums(is.na(dfFao))
+```
+
+
 ## Construcción de nuevos datos (atributos)
 
+No se hace necesario contruir datos nuevos.
+
 ## Transformaciones aplicadas a los datos
+
+A este punto, los datos están listos para ser unidos, utlizado los valores descritos en la sección de [descripción de los datos](#descripcion.datos)
 
 # Fase de modelado
 
