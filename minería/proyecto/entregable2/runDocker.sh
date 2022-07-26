@@ -1,0 +1,1 @@
+docker run -it -v /mnt/c/Users/ERivera/Documents/dataScience/minería/proyecto/entregable1:/home/jovyan/work -p 8888:8888 --name tarea9 jupyter/tensorflow-notebook
