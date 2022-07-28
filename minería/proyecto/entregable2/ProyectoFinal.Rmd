@@ -107,7 +107,7 @@ Ello permitiría un mejor uso presupuestario con respecto a la inversión en pro
 
 ### Recursos
 
-![Tabla de tiempos.](times.png)
+![](times.png)
 
 ### Evaluación inicial de herramientas y técnicas
 
@@ -127,6 +127,8 @@ El objetivo de la minería de datos es predecir el consumo y la producción anua
 
 Como éxito se espera que la predicción antes mencionada tenga un nivel de confianza de al menos 80%.
 
+----
+
 # Fase de entendimiento de los datos
 
 ## Recopilación inicial de datos
@@ -143,6 +145,7 @@ Como éxito se espera que la predicción antes mencionada tenga un nivel de conf
 3.  FAO, Cultivos y productos ganaderos.
     Este reporte emitido por la Organización de Comida y Agricultura de la ONU (FAO por sus siglas en inglés) contiene la cantidad de carne producida por cada país.
     Actualizado por última vez en Febrero de 2022.
+
 
 ### Método de acceso
 
@@ -208,7 +211,7 @@ Las variables a utilizar:
 
 El cruce de la información se realiza utilizando la siguiente tabla:
 
-![Tabla de comparación.](fao_oecd.png)
+![](fao_oecd.png)
 
 Como lo menciona la tabla, para unir "Area" y "Location" se necesita de un tercer dataset intermedio para convertir los códigos en "Location" a nombres de países como en "Area".
 
@@ -225,22 +228,23 @@ Sobre los datasets
 Una vez unidos los datasets, se puede observar que los valores de ambos datasets corresponden a medidas reales con comportamiento similar.
 
 Gráficos generados usando [python y Jypiter notebook](https://github.com/netor82/dataScience/blob/master/miner%C3%ADa/proyecto/entregable1/Revisar%20datos%20de%20proyecto.ipynb).
-![Total por tipo](totalPorTipo.png)
+![](totalPorTipo.png)
+
+
+
 Valores sumados por año:
 
-![Total](total.png)
+![](total.png)
 
 Existe una correlación de 99% entre las cantidades de consumo y producción.
 
 Matriz de correlación para valores numéricos:
 
-![Correlación](correlac.png)
+![](correlac.png)
 
 ### Calidad de datos
 
-El dataset de FAO tiene 68 valores nulos que serán omitidos (evidencia en la siguiente sección).  Dichos datos faltantes serán omitidos.
-
-El dataset OECD sobre consumo, trae información sobre el consumo de carnes de 35 países, para un total de 12160 registros.
+El **dataset OECD** sobre consumo, trae información sobre el consumo de carnes de 35 países, para un total de 12160 registros.
 De los cuales, 247 valores son iguales a 0, pero no los descartamos pues puede ser que un país no haya tenido producción de ese tipo de carne en un año en particular, o dada su ubicación geográfica o su tipo de actividad económica.
 
 Es este mismo dataset de OECD sobre consumo, una columna viene con todos sus valores en nulo (evidencia también en la sección siguiente), dicha columna se descartarà al limpiar los datos.
@@ -251,17 +255,25 @@ Los valores están en miles de toneladas, deben ser entonces multiplicados por 1
 
 El dataset de la FAO sobre datos de producción, contiene un total de 42358 registros, con información de 209 países.
 
+Además, el dataset de FAO tiene 68 valores nulos que serán omitidos (evidencia en la siguiente sección).
+
 Con respecto al nombre de los países, sí se requiere manipulación de los datos para que exista una correspondencia con el dataset de los países.
 En total existen 39 inconsistencias.
-Sin embargo, sólo es necesario modificar 6 de ellos por no estar todos los países representados en el dataset de OECD.
+Sin embargo, sólo es necesario modificar 7 de ellos por no estar todos los países representados en el dataset de OECD.
+
 Los países a modificar sus nombres en este dataset de la FAO son:
 
-![Tabla de países.](country.png)
+![](country.png)
+
+----
 
 # Fase de Preparación de los datos
 
-Dado que los arhivos de datos provienen de fuentes diferentes, se hizo necesario aplicar un proceso de limpieza para poder cruzar la información.
-Para ello, se necesitó una tercera fuente de datos -países- y cambiar valores.
+Dado que los archivos de datos provienen de fuentes diferentes, se hizo necesario aplicar un proceso de limpieza para poder cruzar la información.
+Para ello, se necesitó una tercera fuente de datos -países- y cambiar los valores citados en la tabla anterior.
+
+
+![](dfJoin.png)
 
 ## Selección de los datos
 
@@ -312,7 +324,7 @@ head2(dfConsumption, 2)
 ```{r}
 nrow(dfConsumption)
 ```
-Cantidad de países en el Dataset de dfFao es 38 = 35 países + 3 valores especiales de valores calculados en el dataset, a saber "BRICS", "WLD" y "OECD".
+Cantidad de países en el Dataset de dfFao es 38 = 35 países + 3 valores especiales de valores calculados en el dataset, a saber "BRICS" (Brasil, Russia, India, China y Sur África), "WLD" (World) y "OECD" (países de la OECD).
 ```{r}
 length(unique(dfConsumption$LOCATION))
 unique(dfConsumption$LOCATION)
@@ -326,6 +338,9 @@ colSums(is.na(dfConsumption))
 
 
 ## Limpieza de los datos
+
+Nota, el siguiente código de R sigue el mismo algoritmo aplicado en el documento de [python](https://github.com/netor82/dataScience/blob/timeSeries/miner%C3%ADa/proyecto/entregable1/Revisar%20datos%20de%20proyecto.ipynb).
+
 
 ### Pasos para limpiar dfCountries
 
@@ -352,7 +367,7 @@ unirDf <- function(df1, df2, columna){
 }
 ```
 
-Valores que están en *dfConsumption* pero no en dfCountries.
+Valores que están en _dfConsumption_ pero no en _dfCountries_.
 
 ```{r}
 dfUnicosEnConsumo <- data.frame(unique(dfConsumption[,'LOCATION']))
@@ -362,7 +377,7 @@ dfJoinedConsumptionAndCountries <- unirDf(dfUnicosEnConsumo, dfCountries, 'LOCAT
 dfJoinedConsumptionAndCountries[is.na(dfJoinedConsumptionAndCountries$Area),]
 ```
 
-Esto es esperado, pues el dataset de consumo de OEDC (dfConsumption) usa estos tres valores anteriores como "especiales" para su propio análisis, por ejemplo WLD o *World* es el valor calculado que suma a todo el mundo.
+Esto es esperado, pues el dataset de consumo de OEDC _dfConsumption_ usa estos tres valores anteriores como "especiales" para su propio análisis, por ejemplo WLD o *World* es el valor calculado que suma a todo el mundo.
 
 Ahora, quitamos esos valores, y nos dejamos de Consumption los valores de los cuales sí tenemos el país correspondiente según la columna *Location*.
 
@@ -557,22 +572,112 @@ No se hace necesario contruir datos nuevos.
 
 A este punto, los datos están listos para ser unidos, utlizado los valores descritos en la sección de [descripción de los datos](#descripcion.datos)
 
+---
+
 # Fase de modelado
 
 ## Selección de las técnicas a utilizar
 
+Se utilizaron dos técnicas para crear los modelos:
+
+1. Árbol de decisión para regresión
+2. Red Neuronal
+
+Para estimar su eficacia se utilizó el MSE (median squared error).
+
 ## Construcción del modelo
+
+El problema se plantea como **una serie de tiempo**, por lo que se acomoda usando
+el valor en el tiempo _T_ y el valor en el tiempo _T+1_ en la misma fila.
+
 
 ### Selección de los parámetros (justificar su selección)
 
+**1. Árbol de decisión**
+
+No se utilizó ningún hiperparámetro para este modelo.  Código en python:
+
+```{python eval=FALSE}
+clf = DecisionTreeRegressor()
+clf.fit(X_train,Y_train)
+Y_pred_train = clf.predict(X_train)
+```
+
+La evaluación se hizo posteriormente usando MSE.
+
+**2. Red Neuronal**
+
+La red neuronal se contruyó de tres capas:
+    
+a. Capa de entrada con 41 nodos.  Luego del _hot enconding_ quedan 35 columnas de países, 4 de tipo de carne, una del año, y la del consumo en el tiempo T.
+b. Capa intermedia de 32 nodos
+c. Capa de salida con un nodo pues la salida es una predicción.
+
+Usa el MSE como estimador de pérdida, y se utilizan 300 epochs.
+
 ### Ejecución
+
+La ejecución se divide en dos partes: una para Consumo y la segunda para Producción.
+
+Durante la ejecución se recolectan los valores predichos para el año 2020 junto con los estimadores de error, dichos valores se muestran en la sección siguiente.
+
+```{python eval=FALSE}
+ejecutarModelos(dfTrainConsumo, dfTestConsumo, dfPredConsumo, 'Consumption_x', 'Consumption_y', 'Consumo')
+ejecutarModelos(dfTrainProd, dfTestProd, dfPredProd, 'Production_x', 'Production_y', 'Producción')
+```
+
+Código disponible [aquí](https://github.com/netor82/dataScience/blob/timeSeries/miner%C3%ADa/proyecto/entregable1/Revisar%20datos%20de%20proyecto.ipynb).
+
 
 ### Descripción de los modelos obtenidos
 
+
+
 ## Evaluación de los modelos
 
-### Describir los resultados obtenidos con cada modelo
+### Resultados
+
+**Valores de MSE** de ambos modelos para una corrida
+
+- Test = con datos de pruebas
+- Train = con datos de entrenamiento
+
+```{r echo=FALSE}
+mse = data.frame(Tipo = c('Árbol de Decisión Train', 'Árbol de Decisión Test', 'Red Neural Train', 'Red Neural Test'),
+                 Consumo = c(0, 284268, 7.8* 10**10, 8.62*10**10),
+                 Producción = c(0, 241618, 3.5486*10**11, 2.2067*10**11))
+head2(mse, 4)
+```
+
+Como observación, los valores de SME para la Red Neuronal están en hasta 6 órdenes de magnitud mayor, es decir, más alejados de los valores reales.
+
+
 
 ### Seleccionar el mejor modelo
 
+El mejor resultado lo arroja el modelo que usa el **Árbol de Decisión**, tanto para Consumo como para Producción.
+
+En esta tabla se muestran las sumas del **total de los valores** predichos por los algoritmos junto con los datos reales para 2020.
+
+En ambos casos, los resultados por el Árbol de Decisión se acercan más a los datos reales que sus análogos producidos por la Red Neuronal.
+
+```{r echo=FALSE}
+comparacionDatos = data.frame(
+  Tipo = c('Árbol de decisión', 'Red Neuronal', 'Dato real'),
+  Consumo = c(253566480, 253703968, 246539331),
+  Producción = c(249278633, 209699168, 238388169)
+)
+head2(comparacionDatos, 4)
+```
+
+
+----
+
 # Diseño y construcción del dashboard
+
+[Dashboard de Tableau](https://public.tableau.com/shared/66JGBXQQP)
+
+El filtro por **Año** está de 1990 a 2020 por defecto, que corresponde a los datos reales.
+
+Sin embargo, también se puede **ampliar el rango** para incluir los **valores predichos** para el 2021 por el modelo seleccionado.
+
