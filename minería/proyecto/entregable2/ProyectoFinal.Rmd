@@ -631,7 +631,7 @@ Código disponible [aquí](https://github.com/netor82/dataScience/blob/timeSerie
 
 ### Descripción de los modelos obtenidos
 
-
+Entre los modelos obtenidos después de la ejecución ambos cumplen con el propósito de la predicción a un año (T + 1), siendo cercanamente acertadas ambas, aunque para efectos de MSE se logran mejores resultados en el Árbol de decisión, a nivel de entrenamiento y testeo se logran valores muy diferenciados en las evaluaciones del RNN, por lo cual generan dudas sobre si realmente cumplirá las metas de predicción en todos los posibles casos para fines prácticos si se desea aplicar este modelo se tendría que hacer mejoras. (más detalles en la sección de resultados)
 
 ## Evaluación de los modelos
 
@@ -651,6 +651,9 @@ head2(mse, 4)
 
 Como observación, los valores de SME para la Red Neuronal están en hasta 6 órdenes de magnitud mayor, es decir, más alejados de los valores reales.
 
+Tras la selección del módelo también se aplicó un R2 obteniendo resultados de 1.0 por lo cual se cumple más de 80%, aunque se podría tomar como un overfitting del modelo a nivel del entreanmuiento pero se logra un 0.97 a nivel de test lo cual son grandes resultados igualmente.
+
+![](tree_res.png)
 
 
 ### Seleccionar el mejor modelo
@@ -675,7 +678,7 @@ head2(comparacionDatos, 4)
 
 # Diseño y construcción del dashboard
 
-[Dashboard de Tableau](https://public.tableau.com/shared/66JGBXQQP)
+[Dashboard de Tableau](https://public.tableau.com/views/Proyecto_16587985093510/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
 
 El filtro por **Año** está de 1990 a 2020 por defecto, que corresponde a los datos reales.
 
